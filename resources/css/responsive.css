@@ -1,0 +1,151 @@
+/* resources/css/responsive.css */
+/* File ini berisi semua style untuk membuat aplikasi responsive di mobile */
+
+/* Breakpoint umum: Tablet dan di bawahnya (lebar maks 991px) */
+@media (max-width: 991px) {
+    /* === PERBAIKAN UMUM (app.css) === */
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .page-header .page-title {
+        font-size: 1.5rem;
+    }
+
+    .card-body {
+        padding: 1.25rem;
+    }
+
+    .dynamic-image-card {
+        height: 40vh; /* Kurangi tinggi gambar di mobile */
+    }
+
+    /* Perbesar handle BBox agar mudah disentuh */
+    .bbox-handle {
+        width: 18px;
+        height: 18px;
+        border-width: 3px;
+    }
+    .handle-nw {
+        top: -9px;
+        left: -9px;
+    }
+    .handle-ne {
+        top: -9px;
+        right: -9px;
+    }
+    .handle-sw {
+        bottom: -9px;
+        left: -9px;
+    }
+    .handle-se {
+        bottom: -9px;
+        right: -9px;
+    }
+    .handle-n {
+        top: -9px;
+    }
+    .handle-s {
+        bottom: -9px;
+    }
+    .handle-w {
+        left: -9px;
+    }
+    .handle-e {
+        right: -9px;
+    }
+
+    /* === HALAMAN ANOTASI (annotation.css) === */
+    #main-content-row > .col-lg-7,
+    #main-content-row > .col-lg-5 {
+        width: 100%;
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    #main-content-row {
+        flex-direction: column;
+    }
+
+    #annotation-wrapper {
+        max-height: 50vh; /* Sesuaikan tinggi area gambar untuk layar vertikal */
+    }
+
+    #thumbnail-container {
+        padding: 0.5rem;
+    }
+
+    /* === HALAMAN EVALUASI (evaluate.css) === */
+    .main-tabs .nav-link {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    /* Membuat tabel bisa di-scroll horizontal */
+    .confusion-matrix-table-wrapper-web {
+        overflow-x: auto;
+        padding-bottom: 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+    }
+}
+
+/* Breakpoint spesifik: Smartphone (lebar maks 767px) */
+@media (max-width: 767px) {
+    body {
+        font-size: 0.9rem;
+    }
+
+    .page-header .page-title {
+        font-size: 1.3rem;
+    }
+
+    .page-actions {
+        display: flex;
+        flex-wrap: wrap; /* Tombol akan turun ke bawah jika tidak muat */
+        gap: 0.5rem;
+    }
+
+    h1,
+    .h1 {
+        font-size: 1.6rem;
+    }
+    h2,
+    .h2 {
+        font-size: 1.4rem;
+    }
+    h3,
+    .h3 {
+        font-size: 1.2rem;
+    }
+
+    /* --- Klasifikasi --- */
+    #result-main-card .row {
+        flex-direction: column; /* Tumpuk gambar asli & hasil deteksi */
+    }
+
+    #manual-bbox-controls {
+        flex-direction: column; /* Tumpuk grup tombol BBox */
+        align-items: stretch !important; /* Buat tombol jadi full-width */
+    }
+
+    #manual-bbox-controls .btn-group {
+        width: 100%;
+    }
+
+    #manual-bbox-controls .btn-group .btn {
+        flex-grow: 1; /* Bagikan lebar secara merata */
+    }
+
+    /* --- Anotasi --- */
+    #annotation-page-container h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    #gallery-controls {
+        flex-direction: column;
+    }
+}
