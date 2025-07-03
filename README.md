@@ -127,7 +127,7 @@ Setelah mengunduh dan mengekstrak file ZIP, unggah kontennya ke *bucket* Wasabi 
 
 Sistem ini menggunakan model YOLOv8 yang telah dilatih secara kustom untuk membantu deteksi objek melon.
 
-- **[UNDUH MODEL `best_yolov8x.pt` DI SINI](<LINK_GOOGLE_DRIVE_ANDA_DI_SINI>)**
+- **[UNDUH MODEL `best_yolov8x.pt` ATAU LAINNYA DI SINI](<https://drive.google.com/drive/folders/1ACJMSUR6U_fIA29GoPZ6zpn-Ql0nZ7DC?usp=sharing>)**
 
 Setelah mengunduh, letakkan file `best_yolov8x.pt` di dalam direktori proyek Laravel Anda pada path: `storage/app/models_yolo/`.
 
