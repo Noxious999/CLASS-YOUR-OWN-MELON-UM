@@ -139,6 +139,8 @@ Setelah semua persiapan selesai, Anda harus menjalankan alur kerja berikut secar
 
 Ini adalah langkah paling krusial. Anda harus memberikan label dan *bounding box* pada setiap gambar di *dataset*.
 
+![Contoh Tampilan Web Anotasi Manual](https://i.imgur.com/LpscTte.png)
+
 1.  Jalankan server lokal Anda (misalnya melalui Laragon).
 2.  Akses halaman anotasi melalui URL lokal Anda, contoh: `http://nama-proyek.test/annotate`.
 3.  Di halaman ini, Anda akan melihat antrian gambar yang belum dianotasi.
