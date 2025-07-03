@@ -1,4 +1,4 @@
-# C.Y.O.M (Class Your Own Melon) - Sistem Klasifikasi Kematangan Melon
+# C.Y.O.M (Class Your Own Melon) - IMPLEMENTASI SISTEM WEB KLASIFIKASI KEMATANGAN MELON DENGAN IMAGICK DAN RUBIX-ML MELALUI CITRA UNGGAHAN DAN KAMERA
 
 Selamat datang di repositori proyek **C.Y.O.M (Class Your Own Melon)**. Ini adalah sistem web *end-to-end* yang dibangun menggunakan Laravel untuk mengklasifikasikan kematangan buah melon berdasarkan analisis citra. Sistem ini mampu menerima input gambar dari unggahan manual pengguna maupun akuisisi langsung dari kamera Raspberry Pi.
 
@@ -72,10 +72,10 @@ Langkah-langkah ini untuk menyiapkan proyek Laravel di mesin lokal Anda.
       # Kredensial Wasabi S3 (Isi sesuai akun Anda)
       WASABI_ACCESS_KEY_ID=YOUR_WASABI_ACCESS_KEY
       WASABI_SECRET_ACCESS_KEY=YOUR_WASABI_SECRET_KEY
-      WASABI_DEFAULT_REGION=ap-southeast-1 # atau region Anda
+      WASABI_DEFAULT_REGION=ap-southeast-1 # atau region yang dipilih
       WASABI_BUCKET=nama-bucket-anda
-      WASABI_ENDPOINT=[https://s3.ap-southeast-1.wasabisys.com](https://s3.ap-southeast-1.wasabisys.com) # atau endpoint region Anda
-      WASABI_URL=[https://s3.ap-southeast-1.wasabisys.com/nama-bucket-anda](https://s3.ap-southeast-1.wasabisys.com/nama-bucket-anda)
+      WASABI_ENDPOINT=https://s3.ap-southeast-1.wasabisys.com # atau endpoint region berdasarjan default region
+      WASABI_URL=https://s3.ap-southeast-1.wasabisys.com/nama-bucket-anda
 
       # Path ke Python Executable (Sesuaikan dengan path di komputer Anda)
       # Contoh untuk Windows dengan Anaconda:
@@ -105,6 +105,7 @@ nama-bucket-anda/
 │   └── valid/
 ├── internal_data/
 ├── models/
+├── rpi_captures/
 ├── thumbnails/
 │   ├── test/
 │   ├── train/
@@ -112,13 +113,57 @@ nama-bucket-anda/
 └── uploads_temp/
 ```
 
+Lalu gunakan permission berikut di Bucket Wasabi yang sudah dibuat (buckets --> titik tiga di "Actions" --> Settings --> tab "Permissions" --> Edit:
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::100000393092:root"
+      },
+      "Action": [
+        "s3:GetObject",
+        "s3:GetObjectAcl",
+        "s3:PutObject",
+        "s3:PutObjectAcl",
+        "s3:DeleteObject"
+      ],
+      "Resource": "arn:aws:s3:::ganti-dengan-nama-bucket-mu/*"
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::100000393092:root"
+      },
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::ganti-dengan-nama-bucket-mu",
+      "Condition": {
+        "StringLike": {
+          "s3:prefix": [
+            "dataset/*",
+            "uploads_temp/*",
+            "models/*",
+            "internal_data/*",
+            "rpi_captures/*",
+            "thumbnails/*",
+            ""
+          ]
+        }
+      }
+    }
+  ]
+}
+```
+
 ### 3.2. Unduh Dataset Awal
 
 *Dataset* gambar melon yang digunakan dalam penelitian ini terlalu besar untuk disertakan di GitHub.
 
-- **[UNDUH DATASET AWAL DI SINI](<LINK_GOOGLE_DRIVE_ANDA_DI_SINI>)**
+- **[UNDUH DATASET AWAL DI SINI](https://drive.google.com/drive/folders/1IPBmKMtqVwxjv25niHaP8dfd5yys79oH?usp=sharing)**
 
-Setelah mengunduh dan mengekstrak file ZIP, unggah kontennya ke *bucket* Wasabi Anda sesuai dengan struktur berikut:
+Setelah mengunduh seluruh dataset, unggah kontennya ke *bucket* Wasabi Anda sesuai dengan struktur berikut:
 - Seluruh gambar dari folder `test` di ZIP diunggah ke `dataset/test/` di Wasabi.
 - Seluruh gambar dari folder `train` di ZIP diunggah ke `dataset/train/` di Wasabi.
 - Seluruh gambar dari folder `valid` di ZIP diunggah ke `dataset/valid/` di Wasabi.
