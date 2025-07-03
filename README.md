@@ -1,66 +1,218 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# C.Y.O.M (Class Your Own Melon) - Sistem Klasifikasi Kematangan Melon
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Selamat datang di repositori proyek **C.Y.O.M (Class Your Own Melon)**. Ini adalah sistem web *end-to-end* yang dibangun menggunakan Laravel untuk mengklasifikasikan kematangan buah melon berdasarkan analisis citra. Sistem ini mampu menerima input gambar dari unggahan manual pengguna maupun akuisisi langsung dari kamera Raspberry Pi.
 
-## About Laravel
+Proyek ini memanfaatkan *library* Imagick untuk ekstraksi fitur citra, Rubix-ML untuk melatih model *machine learning* dengan arsitektur *Stacking Ensemble*, dan skrip Python dengan YOLOv8 untuk membantu deteksi objek.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+![Contoh Tampilan Web Klasifikasi](https://i.imgur.com/uG9XgqC.png)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Daftar Isi
+1.  [Prasyarat](#1-prasyarat)
+2.  [Instalasi & Konfigurasi Awal](#2-instalasi--konfigurasi-awal)
+3.  [Persiapan Aset Eksternal (Sangat Penting)](#3-persiapan-aset-eksternal-sangat-penting)
+    - [3.1. Konfigurasi Bucket Wasabi S3](#31-konfigurasi-bucket-wasabi-s3)
+    - [3.2. Unduh Dataset Awal](#32-unduh-dataset-awal)
+    - [3.3. Unduh Model YOLOv8](#33-unduh-model-yolov8)
+4.  [Alur Kerja Machine Learning (Wajib Dijalankan Berurutan)](#4-alur-kerja-machine-learning-wajib-dijalankan-berurutan)
+    - [4.1. Anotasi Dataset Manual](#41-anotasi-dataset-manual)
+    - [4.2. Ekstraksi Fitur](#42-ekstraksi-fitur)
+    - [4.3. Seleksi Fitur (Opsional)](#43-seleksi-fitur-opsional)
+    - [4.4. Pelatihan Model Ensemble](#44-pelatihan-model-ensemble)
+5.  [Pengujian Fungsionalitas Web](#5-pengujian-fungsionalitas-web)
+    - [5.1. Web Klasifikasi Utama](#51-web-klasifikasi-utama)
+    - [5.2. Web Evaluasi Model](#52-web-evaluasi-model)
+6.  [(Opsional) Setup Klien Raspberry Pi](#6-opsional-setup-klien-raspberry-pi)
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 1. Prasyarat
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Sebelum memulai, pastikan lingkungan pengembangan Anda telah memenuhi syarat berikut:
+- **PHP 8.2** atau lebih tinggi
+- **Composer**
+- **Node.js & NPM**
+- **Web Server Lokal** (disarankan menggunakan [Laragon](https://laragon.org/) untuk kemudahan konfigurasi Nginx & host virtual)
+- **Akun Wasabi S3**: Diperlukan untuk penyimpanan semua aset (dataset, model, dll).
+- **Akun Ngrok**: Diperlukan untuk membuat *tunnel* agar Raspberry Pi dapat berkomunikasi dengan server lokal Anda.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 2. Instalasi & Konfigurasi Awal
 
-## Laravel Sponsors
+Langkah-langkah ini untuk menyiapkan proyek Laravel di mesin lokal Anda.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1.  **Clone Repositori**
+    ```bash
+    git clone [https://github.com/username/repo-name.git](https://github.com/username/repo-name.git)
+    cd repo-name
+    ```
 
-### Premium Partners
+2.  **Instal Dependensi**
+    Jalankan perintah berikut untuk menginstal semua dependensi PHP dan JavaScript.
+    ```bash
+    composer install
+    npm install
+    npm run build
+    ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+3.  **Konfigurasi Lingkungan (.env)**
+    - Salin file `.env.example` menjadi `.env`.
+      ```bash
+      cp .env.example .env
+      ```
+    - Buat *application key* baru.
+      ```bash
+      php artisan key:generate
+      ```
+    - Buka file `.env` dan sesuaikan variabel-variabel berikut:
+      ```dotenv
+      # URL Aplikasi (Ganti dengan URL Ngrok statis Anda nanti)
+      APP_URL=[https://your-static-domain.ngrok-free.app](https://your-static-domain.ngrok-free.app)
 
-## Contributing
+      # Kredensial Wasabi S3 (Isi sesuai akun Anda)
+      WASABI_ACCESS_KEY_ID=YOUR_WASABI_ACCESS_KEY
+      WASABI_SECRET_ACCESS_KEY=YOUR_WASABI_SECRET_KEY
+      WASABI_DEFAULT_REGION=ap-southeast-1 # atau region Anda
+      WASABI_BUCKET=nama-bucket-anda
+      WASABI_ENDPOINT=[https://s3.ap-southeast-1.wasabisys.com](https://s3.ap-southeast-1.wasabisys.com) # atau endpoint region Anda
+      WASABI_URL=[https://s3.ap-southeast-1.wasabisys.com/nama-bucket-anda](https://s3.ap-southeast-1.wasabisys.com/nama-bucket-anda)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+      # Path ke Python Executable (Sesuaikan dengan path di komputer Anda)
+      # Contoh untuk Windows dengan Anaconda:
+      PYTHON_EXECUTABLE_PATH="C:/Users/YourUser/anaconda3/python.exe"
+      # Contoh untuk Linux/Mac:
+      # PYTHON_EXECUTABLE_PATH=/usr/bin/python3
 
-## Code of Conduct
+      # URL Server Flask di Raspberry Pi (Ganti dengan IP Pi di jaringan Anda)
+      RASPBERRY_PI_URL_FLASK=[http://192.168.1.10:5001](http://192.168.1.10:5001)
+      ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 3. Persiapan Aset Eksternal (Sangat Penting)
 
-## Security Vulnerabilities
+Proyek ini tidak akan berjalan tanpa aset-aset berikut.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 3.1. Konfigurasi Bucket Wasabi S3
 
-## License
+Anda harus membuat sebuah *bucket* di akun Wasabi Anda. Nama *bucket* ini harus sama dengan yang Anda masukkan di `WASABI_BUCKET` pada file `.env`. Setelah itu, buat struktur folder berikut di dalam *bucket* Anda:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+nama-bucket-anda/
+├── dataset/
+│   ├── annotations/
+│   ├── features/
+│   ├── test/
+│   ├── train/
+│   └── valid/
+├── internal_data/
+├── models/
+├── thumbnails/
+│   ├── test/
+│   ├── train/
+│   └── valid/
+└── uploads_temp/
+```
+
+### 3.2. Unduh Dataset Awal
+
+*Dataset* gambar melon yang digunakan dalam penelitian ini terlalu besar untuk disertakan di GitHub.
+
+- **[UNDUH DATASET AWAL DI SINI](<LINK_GOOGLE_DRIVE_ANDA_DI_SINI>)**
+
+Setelah mengunduh dan mengekstrak file ZIP, unggah kontennya ke *bucket* Wasabi Anda sesuai dengan struktur berikut:
+- Seluruh gambar dari folder `test` di ZIP diunggah ke `dataset/test/` di Wasabi.
+- Seluruh gambar dari folder `train` di ZIP diunggah ke `dataset/train/` di Wasabi.
+- Seluruh gambar dari folder `valid` di ZIP diunggah ke `dataset/valid/` di Wasabi.
+
+### 3.3. Unduh Model YOLOv8
+
+Sistem ini menggunakan model YOLOv8 yang telah dilatih secara kustom untuk membantu deteksi objek melon.
+
+- **[UNDUH MODEL `best_yolov8x.pt` DI SINI](<LINK_GOOGLE_DRIVE_ANDA_DI_SINI>)**
+
+Setelah mengunduh, letakkan file `best_yolov8x.pt` di dalam direktori proyek Laravel Anda pada path: `storage/app/models_yolo/`.
+
+## 4. Alur Kerja Machine Learning (Wajib Dijalankan Berurutan)
+
+Setelah semua persiapan selesai, Anda harus menjalankan alur kerja berikut secara berurutan melalui terminal di direktori proyek Anda.
+
+### 4.1. Anotasi Dataset Manual
+
+Ini adalah langkah paling krusial. Anda harus memberikan label dan *bounding box* pada setiap gambar di *dataset*.
+
+1.  Jalankan server lokal Anda (misalnya melalui Laragon).
+2.  Akses halaman anotasi melalui URL lokal Anda, contoh: `http://nama-proyek.test/annotate`.
+3.  Di halaman ini, Anda akan melihat antrian gambar yang belum dianotasi.
+4.  Untuk setiap gambar:
+    - Klik tombol **"Estimasi BBox Otomatis"** untuk mendapatkan bantuan dari model YOLOv8.
+    - Jika hasilnya kurang pas, Anda bisa **menggambar Bbox secara manual** dengan menahan dan menyeret kursor mouse pada gambar.
+    - Anda dapat **memilih, memindahkan, mengubah ukuran, atau menghapus** Bbox yang ada.
+    - Untuk setiap Bbox, **wajib memilih kelas kematangan** ("Matang" atau "Belum Matang").
+    - Klik **"Simpan & Lanjutkan"**. Sistem akan otomatis memuat gambar berikutnya dalam antrian.
+5.  Lanjutkan proses ini hingga seluruh gambar dalam antrian telah dianotasi.
+
+### 4.2. Ekstraksi Fitur
+
+Setelah semua anotasi selesai, jalankan perintah Artisan berikut untuk mengekstrak fitur numerik dari setiap anotasi.
+
+```bash
+php artisan dataset:extract-features --set=all
+```
+Perintah ini akan membaca file `_annotations.csv` yang dibuat pada langkah sebelumnya dan menghasilkan file `_features.csv` di dalam *bucket* `dataset/features/` di Wasabi.
+
+### 4.3. Seleksi Fitur (Opsional)
+
+Langkah ini bertujuan untuk mengidentifikasi fitur mana yang paling berpengaruh terhadap klasifikasi. Proyek ini sudah dikonfigurasi untuk menggunakan 20 fitur teratas. Namun, jika Anda ingin melihat hasilnya sendiri, jalankan:
+
+```bash
+php artisan train:select-features
+```
+Perintah ini akan menampilkan peringkat fitur di terminal Anda.
+
+### 4.4. Pelatihan Model Ensemble
+
+Ini adalah langkah terakhir dalam pipeline ML, di mana model klasifikasi utama dilatih.
+
+```bash
+php artisan train:melon-model --with-test
+```
+Perintah ini akan:
+- Melatih *base model* (KNN dan Random Forest).
+- Membuat *meta-features* dari hasil prediksi *base model*.
+- Melatih *meta-learner* (Random Forest) untuk menciptakan model *ensemble* final.
+- Menyimpan semua model (`.model`) dan metadatanya (`.json`) ke dalam *bucket* `models/` di Wasabi.
+- Opsi `--with-test` memastikan model dievaluasi pada *set* data tes untuk mengukur performa generalisasinya.
+
+## 5. Pengujian Fungsionalitas Web
+
+Setelah model berhasil dilatih, Anda dapat mulai menggunakan aplikasi web.
+
+### 5.1. Web Klasifikasi Utama
+
+Akses halaman utama aplikasi (misalnya `http://nama-proyek.test/`).
+- **Mode Unggah Manual**: Pilih gambar melon dari komputer Anda dan klik "Klasifikasi".
+- **Mode Kamera Pi**: Jika Anda telah menyiapkan Raspberry Pi (lihat langkah 6), aktifkan *toggle* ke "Mode Kamera Pi". Klik "Mulai Preview" untuk melihat *stream* video, posisikan melon, lalu klik "Ambil Gambar & Klasifikasi".
+- **Hasil**: Sistem akan menampilkan gambar asli, gambar hasil deteksi dengan *bounding box*, dan kartu hasil klasifikasi untuk setiap Bbox yang ditemukan.
+- **Interaktivitas**: Anda dapat mengedit Bbox, menambah Bbox baru, atau menghapus Bbox, lalu klik "Klasifikasi Ulang" untuk mendapatkan prediksi baru berdasarkan perubahan Anda.
+- **Feedback**: Berikan masukan apakah hasil klasifikasi sudah sesuai. Jika Anda memilih "Tidak, Perlu Koreksi", gambar tersebut akan otomatis ditambahkan ke antrian anotasi untuk perbaikan di masa depan.
+
+### 5.2. Web Evaluasi Model
+
+Akses halaman evaluasi (misalnya `http://nama-proyek.test/evaluate`). Di sini Anda dapat melihat:
+- Statistik detail mengenai jumlah dataset, anotasi, dan fitur.
+- Performa setiap model yang dilatih, termasuk *Confusion Matrix*, Akurasi, Presisi, *Recall*, dan F1-Score.
+- Visualisasi *Learning Curve* untuk menganalisis potensi *overfitting* atau *underfitting*.
+
+## 6. (Opsional) Setup Klien Raspberry Pi
+
+Jika Anda ingin menggunakan fitur kamera jarak jauh:
+1.  Salin file `raspberry_pi_server.py` dari direktori `scripts/` proyek ini ke Raspberry Pi Anda.
+2.  Instal dependensi yang diperlukan di Raspberry Pi:
+    ```bash
+    pip3 install Flask picamera2 boto3
+    ```
+3.  Pastikan Raspberry Pi terhubung ke jaringan WiFi yang sama dengan komputer server Laravel Anda.
+4.  Jalankan server Flask di Raspberry Pi:
+    ```bash
+    python3 raspberry_pi_server.py
+    ```
+5.  Pastikan variabel `RASPBERRY_PI_URL_FLASK` di file `.env` Laravel Anda sudah menunjuk ke alamat IP dan port yang benar dari Raspberry Pi Anda.
