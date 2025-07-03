@@ -4,7 +4,7 @@ Selamat datang di repositori proyek **C.Y.O.M (Class Your Own Melon)**. Ini adal
 
 Proyek ini memanfaatkan *library* Imagick untuk ekstraksi fitur citra, Rubix-ML untuk melatih model *machine learning* dengan arsitektur *Stacking Ensemble*, dan skrip Python dengan YOLOv8 untuk membantu deteksi objek.
 
-![Contoh Tampilan Web Klasifikasi](https://i.imgur.com/uG9XgqC.png)
+![Contoh Tampilan Web Klasifikasi](<blockquote class="imgur-embed-pub" lang="en" data-id="a/rh4dWOT"  ><a href="//imgur.com/a/rh4dWOT">A</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>)
 
 ---
 
