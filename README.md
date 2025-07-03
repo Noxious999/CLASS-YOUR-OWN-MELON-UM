@@ -43,8 +43,8 @@ Langkah-langkah ini untuk menyiapkan proyek Laravel di mesin lokal Anda.
 
 1.  **Clone Repositori**
     ```bash
-    git clone [https://github.com/username/repo-name.git](https://github.com/username/repo-name.git)
-    cd repo-name
+    git clone https://github.com/Noxious999/CLASS-YOUR-OWN-MELON-UM.git
+    cd CLASS-YOUR-OWN-MELON-UM
     ```
 
 2.  **Instal Dependensi**
@@ -56,10 +56,6 @@ Langkah-langkah ini untuk menyiapkan proyek Laravel di mesin lokal Anda.
     ```
 
 3.  **Konfigurasi Lingkungan (.env)**
-    - Salin file `.env.example` menjadi `.env`.
-      ```bash
-      cp .env.example .env
-      ```
     - Buat *application key* baru.
       ```bash
       php artisan key:generate
