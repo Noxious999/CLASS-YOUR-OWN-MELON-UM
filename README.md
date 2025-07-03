@@ -129,7 +129,7 @@ Sistem ini menggunakan model YOLOv8 yang telah dilatih secara kustom untuk memba
 
 - **[UNDUH MODEL `best_yolov8x.pt` ATAU LAINNYA DI SINI](<https://drive.google.com/drive/folders/1ACJMSUR6U_fIA29GoPZ6zpn-Ql0nZ7DC?usp=sharing>)**
 
-Setelah mengunduh, letakkan file `best_yolov8x.pt` di dalam direktori proyek Laravel Anda pada path: `storage/app/models_yolo/`.
+Setelah mengunduh, letakkan file `best_yolov8x.pt` atau .pt apa pun yang dipilih di dalam direktori proyek Laravel Anda pada path: `storage/app/models_yolo/`.
 
 ## 4. Alur Kerja Machine Learning (Wajib Dijalankan Berurutan)
 
