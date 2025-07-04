@@ -1,6 +1,7 @@
 # C.Y.O.M (Class Your Own Melon) - IMPLEMENTASI SISTEM WEB KLASIFIKASI KEMATANGAN MELON DENGAN IMAGICK DAN RUBIX-ML MELALUI CITRA UNGGAHAN DAN KAMERA
+**VIDEO DEMONSTRASI**: https://drive.google.com/file/d/1DI5A5rGkki_MG0eXzWi-DCoHX0NzFk2f/view?usp=sharing
 
-Selamat datang di repositori proyek **C.Y.O.M (Class Your Own Melon)**. Ini adalah sistem web *end-to-end* yang dibangun menggunakan Laravel untuk mengklasifikasikan kematangan buah melon berdasarkan analisis citra. Sistem ini mampu menerima input gambar dari unggahan manual pengguna maupun akuisisi langsung dari kamera Raspberry Pi.
+Selamat datang di repositori proyek **C.Y.O.M (Class Your Own Melon)**. Sebuah proyek yang dilakukan untuk memenuhi Tugas Akhir D4 Teknologi Rekayasa Sistem Elektronika, Universitas Negeri Malang Tahun 2021. Ini adalah sistem web *end-to-end* yang dibangun menggunakan Laravel untuk mengklasifikasikan kematangan buah melon berdasarkan analisis citra. Sistem ini mampu menerima input gambar dari unggahan manual pengguna maupun akuisisi langsung dari kamera Raspberry Pi.
 
 Proyek ini memanfaatkan *library* Imagick untuk ekstraksi fitur citra, Rubix-ML untuk melatih model *machine learning* dengan arsitektur *Stacking Ensemble*, dan skrip Python dengan YOLOv8 untuk membantu deteksi objek.
 
